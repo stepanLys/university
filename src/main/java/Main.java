@@ -21,8 +21,16 @@ public class Main {
         EmployeeRepository employeeRepository = new EmployeeRepository(manager);
         DepartmentRepository departmentRepository = new DepartmentRepository(manager);
 
-        addEmployees(employeeRepository);
-        addDepartments(employeeRepository, departmentRepository);
+//        addEmployees(employeeRepository);
+//        addDepartments(employeeRepository, departmentRepository);
+
+//        System.out.println(employeeRepository.findByTemplateName("va"));
+//        System.out.println(departmentRepository.getStatistic("NU LP"));
+//        System.out.println(employeeRepository.findByDepartment("Nu LP"));
+//        System.out.println(departmentRepository.avgSalary("NU LP"));
+//        System.out.println(departmentRepository.countOfEmployee("NU LP"));
+//        System.out.println(departmentRepository.headOfDepartment("NU LP"));
+
 
         manager.close();
         factory.close();

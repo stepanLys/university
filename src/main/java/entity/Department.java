@@ -1,12 +1,14 @@
 package entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@ToString(of = {"id", "name"})
 
 @Entity
 @Table(name = "department")

@@ -1,6 +1,7 @@
 package entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@ToString(of = {"id", "name", "salary", "degree"})
 
 @Entity
 @Table(name = "employee")
@@ -29,4 +31,5 @@ public class Employee {
 
     @OneToOne(mappedBy = "headOfDepartment", cascade = CascadeType.ALL)
     private Department headInDepartment;
+
 }
