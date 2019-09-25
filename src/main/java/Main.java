@@ -1,6 +1,7 @@
 import entity.Degree;
 import entity.Department;
 import entity.Employee;
+import org.w3c.dom.ls.LSOutput;
 import repository.DepartmentRepository;
 import repository.EmployeeRepository;
 
@@ -13,6 +14,7 @@ import java.util.*;
 public class Main {
 
     private static Scanner sc = new Scanner(System.in);
+    private static boolean status = true;
 
     public static void main(String[] args) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("university");
@@ -24,12 +26,70 @@ public class Main {
 //        addEmployees(employeeRepository);
 //        addDepartments(employeeRepository, departmentRepository);
 
-//        System.out.println(employeeRepository.findByTemplateName("va"));
-//        System.out.println(departmentRepository.getStatistic("NU LP"));
-//        System.out.println(employeeRepository.findByDepartment("Nu LP"));
-//        System.out.println(departmentRepository.avgSalary("NU LP"));
-//        System.out.println(departmentRepository.countOfEmployee("NU LP"));
-//        System.out.println(departmentRepository.headOfDepartment("NU LP"));
+
+        while (status) {
+            System.out.println("\n\n1 - show head of department\n" +
+                    "2 - department statistic\n" +
+                    "3 - show the average salary for department\n" +
+                    "4 - show count of employee for department\n" +
+                    "5 - global search by template\n" +
+                    "q - quit\n\n");
+            String menuPicker = sc.next();
+            switch (menuPicker) {
+                case "1": {
+                    System.out.print("Enter department name: ");
+                    String department = sc.next();
+
+                    String header = departmentRepository.headOfDepartment(department);
+
+                    System.out.println("Head of " + department + " department is " + header);
+                    break;
+                }
+                case "2": {
+                    System.out.print("Enter department name: ");
+                    String department = sc.next();
+
+                    List statistic = departmentRepository.getStatistic(department);
+
+                    statistic.forEach(System.out::println);
+
+                    break;
+                }
+                case "3": {
+                    System.out.print("Enter department name: ");
+                    String department = sc.next();
+
+                    Double avgSalary = departmentRepository.avgSalary(department);
+
+                    System.out.println("The average salary of " + department + " is " + avgSalary);
+
+                    break;
+                }
+                case "4": {
+                    System.out.print("Enter department name: ");
+                    String department = sc.next();
+
+                    Long countOfEmployees = departmentRepository.countOfEmployee(department);
+
+                    System.out.println("Count of employees for " + department + " is " + countOfEmployees);
+                    break;
+                }
+                case "5": {
+                    System.out.println("Global search by: ");
+                    String template = sc.next();
+
+                    List<String> byTemplateName = employeeRepository.findByTemplateName(template);
+
+                    System.out.println(byTemplateName);
+
+                    break;
+                }
+                case "q": {
+                    status = false;
+                    break;
+                }
+            }
+        }
 
 
         manager.close();
@@ -38,7 +98,7 @@ public class Main {
 
     private static void addDepartments(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
         Department department1 = new Department();
-        department1.setName("NU LP");
+        department1.setName("ISM");
         department1.setEmployees(new ArrayList<>() {{
             add(employeeRepository.findById(1L));
             add(employeeRepository.findById(2L));
@@ -49,17 +109,17 @@ public class Main {
         department1.setHeadOfDepartment(employeeRepository.findById(1L));
 
         Department department2 = new Department();
-        department2.setName("LNU");
+        department2.setName("ASU");
         department2.setEmployees(new ArrayList<>() {{
             add(employeeRepository.findById(2L));
             add(employeeRepository.findById(4L));
             add(employeeRepository.findById(7L));
             add(employeeRepository.findById(12L));
         }});
-        department2.setHeadOfDepartment(employeeRepository.findById(7L));
+        department2.setHeadOfDepartment(employeeRepository.findById(4L));
 
         Department department3 = new Department();
-        department3.setName("UKU");
+        department3.setName("SAPR");
         department3.setEmployees(new ArrayList<>() {{
             add(employeeRepository.findById(3L));
             add(employeeRepository.findById(6L));
@@ -67,14 +127,14 @@ public class Main {
             add(employeeRepository.findById(10L));
             add(employeeRepository.findById(11L));
         }});
-        department3.setHeadOfDepartment(employeeRepository.findById(4L));
+        department3.setHeadOfDepartment(employeeRepository.findById(7L));
 
         departmentRepository.saveAll(List.of(department1, department2, department3));
     }
 
     private static void addEmployees(EmployeeRepository employeeRepository) {
         Employee employee1 = new Employee();
-        employee1.setName("Yurii Bobalo");
+        employee1.setName("Igor Bobalo");
         employee1.setDegree(Degree.PROFESSOR);
         employee1.setSalary(BigDecimal.valueOf(1500.00));
 
@@ -89,7 +149,7 @@ public class Main {
         employee3.setSalary(BigDecimal.valueOf(900.00));
 
         Employee employee4 = new Employee();
-        employee4.setName("Bohdan Prakh");
+        employee4.setName("Bohdan Vovk");
         employee4.setDegree(Degree.PROFESSOR);
         employee4.setSalary(BigDecimal.valueOf(1457.25));
 

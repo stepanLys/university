@@ -18,24 +18,37 @@ public class EmployeeRepository {
 
 
     public List<Employee> findAll() {
-        return entityManager
-                .createQuery("select e from Employee e", Employee.class)
-                .getResultList();
+        try {
+            return entityManager
+                    .createQuery("select e from Employee e", Employee.class)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public Employee findById(Long id) {
-        return entityManager
-                .createQuery("select e from Employee e where e.id = :id", Employee.class)
-                .setParameter("id", id)
-                .getSingleResult();
+        try {
+            return entityManager
+                    .createQuery("select e from Employee e where e.id = :id", Employee.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public List findByDepartment(String department) {
-        return entityManager
-                .createQuery("select new List(e.id, e.name, e.salary, e.degree) " +
-                        "from Employee e join e.departments d where d.name = :department", List.class)
-                .setParameter("department", department)
-                .getResultList();
+        try {
+            return entityManager
+                    .createQuery("select new List(e.id, e.name, e.salary, e.degree) " +
+                            "from Employee e join e.departments d where d.name = :department", List.class)
+                    .setParameter("department", department)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
+
     }
 
     public List<String> findByTemplateName(String template) {

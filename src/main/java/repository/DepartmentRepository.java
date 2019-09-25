@@ -1,12 +1,11 @@
 package repository;
 
 import entity.Department;
-import entity.Employee;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import java.util.*;
-import java.util.stream.Collectors;
+import javax.persistence.NoResultException;
+import java.util.Iterator;
+import java.util.List;
 
 public class DepartmentRepository {
 
@@ -20,56 +19,76 @@ public class DepartmentRepository {
 
 
     public List<Department> findAll() {
-
-        return entityManager
-                .createQuery("select d from Department d", Department.class)
-                .getResultList();
+        try {
+            return entityManager
+                    .createQuery("select d from Department d", Department.class)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
-    public String getStatistic(String department) {
-
-        List statistic = entityManager
-                .createQuery("select new List(e.degree, count(e.degree)) from Department d " +
-                        "join d.employees e " +
-                        "where d.name = :department group by e.degree", List.class)
-                .setParameter("department", department)
-                .getResultList();
-
-        return statistic.toString();
+    public List<List> getStatistic(String department) {
+        try {
+            return entityManager
+                    .createQuery("select new List(e.degree, count(e.degree)) from Department d " +
+                            "join d.employees e " +
+                            "where d.name = :department group by e.degree", List.class)
+                    .setParameter("department", department)
+                    .getResultList();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public Double avgSalary(String department) {
-        return entityManager
-                .createQuery("select avg(e.salary) from Department d " +
-                        "join d.employees e " +
-                        "where d.name = :department", Double.class)
-                .setParameter("department", department)
-                .getSingleResult();
+        try {
+            return entityManager
+                    .createQuery("select avg(e.salary) from Department d " +
+                            "join d.employees e " +
+                            "where d.name = :department", Double.class)
+                    .setParameter("department", department)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public Long countOfEmployee(String department) {
-        return entityManager
-                .createQuery("select count (e.id) from Department d " +
-                        "join d.employees e " +
-                        "where d.name = :department", Long.class)
-                .setParameter("department", department)
-                .getSingleResult();
+        try {
+            return entityManager
+                    .createQuery("select count (e.id) from Department d " +
+                            "join d.employees e " +
+                            "where d.name = :department", Long.class)
+                    .setParameter("department", department)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public String headOfDepartment(String department) {
-        return entityManager
-                .createQuery("select e.name from Department d " +
-                        "join d.employees e " +
-                        "where d.name = :department and d.headOfDepartment = e.headInDepartment", String.class)
-                .setParameter("department", department)
-                .getSingleResult();
+        try {
+            return entityManager
+                    .createQuery("select e.name from Department d " +
+                            "join d.employees e " +
+                            "where d.headOfDepartment = e.headInDepartment and d.name = :department", String.class)
+                    .setParameter("department", department)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public Department findById(Long id) {
-        return entityManager
-                .createQuery("select c from Department c where c.id = :id", Department.class)
-                .setParameter("id", id)
-                .getSingleResult();
+        try {
+            return entityManager
+                    .createQuery("select c from Department c where c.id = :id", Department.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     public void save(Department department) {
