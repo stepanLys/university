@@ -28,6 +28,17 @@ public class DepartmentRepository {
         }
     }
 
+    public Department findByDepartmentName(String department) {
+        try {
+            return entityManager
+                    .createQuery("select d from Department d where d.name = :name", Department.class)
+                    .setParameter("name", department)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public List<List> getStatistic(String department) {
         try {
             return entityManager

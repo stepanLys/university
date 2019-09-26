@@ -1,7 +1,6 @@
 import entity.Degree;
 import entity.Department;
 import entity.Employee;
-import org.w3c.dom.ls.LSOutput;
 import repository.DepartmentRepository;
 import repository.EmployeeRepository;
 
@@ -9,7 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -37,8 +38,7 @@ public class Main {
             String menuPicker = sc.next();
             switch (menuPicker) {
                 case "1": {
-                    System.out.print("Enter department name: ");
-                    String department = sc.next();
+                    String department = askDepartmentName(departmentRepository);
 
                     String header = departmentRepository.headOfDepartment(department);
 
@@ -46,8 +46,7 @@ public class Main {
                     break;
                 }
                 case "2": {
-                    System.out.print("Enter department name: ");
-                    String department = sc.next();
+                    String department = askDepartmentName(departmentRepository);
 
                     List statistic = departmentRepository.getStatistic(department);
 
@@ -56,8 +55,7 @@ public class Main {
                     break;
                 }
                 case "3": {
-                    System.out.print("Enter department name: ");
-                    String department = sc.next();
+                    String department = askDepartmentName(departmentRepository);
 
                     Double avgSalary = departmentRepository.avgSalary(department);
 
@@ -66,8 +64,7 @@ public class Main {
                     break;
                 }
                 case "4": {
-                    System.out.print("Enter department name: ");
-                    String department = sc.next();
+                    String department = askDepartmentName(departmentRepository);
 
                     Long countOfEmployees = departmentRepository.countOfEmployee(department);
 
@@ -75,12 +72,16 @@ public class Main {
                     break;
                 }
                 case "5": {
-                    System.out.println("Global search by: ");
+                    System.out.print("Global search by: ");
                     String template = sc.next();
 
                     List<String> byTemplateName = employeeRepository.findByTemplateName(template);
 
-                    System.out.println(byTemplateName);
+                    if (byTemplateName.isEmpty()) {
+                        System.out.println("Employees with the same name doesn't exist");
+                    } else {
+                        byTemplateName.forEach(e -> System.out.print(e + ", "));
+                    }
 
                     break;
                 }
@@ -94,6 +95,16 @@ public class Main {
 
         manager.close();
         factory.close();
+    }
+
+    private static String askDepartmentName(DepartmentRepository departmentRepository) {
+        System.out.print("Enter department name: ");
+        String department = sc.next();
+        while (departmentRepository.findByDepartmentName(department) == null) {
+            System.out.print("Wrong! Please, enter correct department name: ");
+            department = sc.next();
+        }
+        return department;
     }
 
     private static void addDepartments(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository) {
